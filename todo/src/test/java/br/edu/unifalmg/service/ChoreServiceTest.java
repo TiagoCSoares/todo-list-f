@@ -282,9 +282,28 @@ public class ChoreServiceTest {
         });
 
         service.loadChores();
-        int size = service.getChores().size();
-        assertEquals(2, size);
+        //int size = service.getChores().size();
+        //assertEquals(2, size);
+        List<Chore> loadChores = service.getChores();
+        assertAll(
+                () -> assertEquals(2, loadChores.size()),
+                () -> assertEquals("Chore #01", loadChores.get(0).getDescription()),
+                () -> assertEquals(Boolean.FALSE, loadChores.get(0).getIsCompleted()),
+                () -> assertEquals(LocalDate.now(), loadChores.get(0).getDeadline()),
+                () -> assertEquals("Chore #02", loadChores.get(1).getDescription()),
+                () -> assertEquals(Boolean.TRUE, loadChores.get(1).getIsCompleted()),
+                () -> assertEquals(LocalDate.now().minusDays(3), loadChores.get(1).getDeadline())
+        );
     }
 
+    @Test
+    @DisplayName("#loadChores > When no chores are loaded > Update the chore list")
+    void loadWhenNoChoresAreLoadedUpdateTheChoreList() {
+        Mockito.when(repository.load()).thenReturn(new ArrayList<>());
+        service.loadChores();
+        List<Chore> loadChores = service.getChores();
+        assertTrue(loadChores.isEmpty()); //assertEquals(0, loadChores.size());
+
+    }
 
 }

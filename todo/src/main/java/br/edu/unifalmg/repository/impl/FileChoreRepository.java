@@ -23,9 +23,11 @@ public class FileChoreRepository implements ChoreRepository {
     public List<Chore> load() {
 
         try {
-            return Arrays.asList(
-                    mapper.readValue(new File("chores.json"), Chore[].class)
-            );
+            // Arrays.asList ->  Gera uma lista IMUTÁVEL
+            return new ArrayList<> (
+                    Arrays.asList(
+                        mapper.readValue(new File("chores.json"), Chore[].class)
+            ));
 
 
         // Using TypeReference

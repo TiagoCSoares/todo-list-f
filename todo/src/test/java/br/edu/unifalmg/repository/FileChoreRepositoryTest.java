@@ -76,4 +76,17 @@ public class FileChoreRepositoryTest {
         );
     }
 
+
+
+
+
+
+
+    @Test
+    @DisplayName("#When the file is loaded > Return TRUE")
+    void test1() {
+        Mockito.when(
+                mapper.writeValue(new File("chores.json"), chores)
+        ).thenReturn(true);
+    }
 }

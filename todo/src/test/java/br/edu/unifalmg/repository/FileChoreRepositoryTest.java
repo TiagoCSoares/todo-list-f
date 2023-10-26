@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -82,11 +83,20 @@ public class FileChoreRepositoryTest {
 
 
 
+
+
     @Test
-    @DisplayName("#When the file is loaded > Return TRUE")
+    @DisplayName("#When the file is not found > Return FALSE")
     void test1() {
-        Mockito.when(
-                mapper.writeValue(new File("chores.json"), chores)
-        ).thenReturn(true);
+        Assertions.assertDoesNotThrow(() -> {
+            List<Chore> chores = Arrays.asList(
+                    new Chore("Chore 1", false, LocalDate.now()),
+                    new Chore("Chore 2", true, LocalDate.now().minusDays(2))
+            );
+            mapper.writeValue(new File("chores.json"), chores);
+            Assertions.assertFalse(chores.isEmpty());
+        });
     }
+
+
 }

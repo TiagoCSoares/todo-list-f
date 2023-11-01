@@ -12,6 +12,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Chore {
 
+    private Long id;
+
     private String description;
 
     private Boolean isCompleted;

@@ -45,6 +45,7 @@ public class MySQLChoreRepository implements ChoreRepository {
                     //Poderiamos ter criado a Chore usando o construtor completo
                     // OU poderiamos ter usado o construtor padrão + ter dado sets
                     Chore chore = Chore.builder()
+                            .id(resultSet.getLong("id"))
                             .description(resultSet.getString("description"))
                             .isCompleted(resultSet.getBoolean("isCompleted"))
                             .deadline(resultSet.getDate("deadline").toLocalDate())
@@ -86,6 +87,27 @@ public class MySQLChoreRepository implements ChoreRepository {
             }
             return  false;
         }
+
+        public boolean update(Chore chore) {
+            if (!connectToMySQL()){
+                return Boolean.FALSE;
+            } try {
+                preparedStatement = connection.prepareStatement(ChoreBook.UPDATE_CHORE);
+                preparedStatement.setString(1, chore.getDescription());
+                preparedStatement.setBoolean(2, chore.getIsCompleted());
+                preparedStatement.setDate(3, Date.valueOf(chore.getDeadline()));
+                preparedStatement.setLong(4, chore.getId());
+
+                int affectedRows = preparedStatement.executeUpdate();
+                return affectedRows > 0;
+            } catch (SQLException exception) {
+                System.out.println("Error when updating the chore in the database.");
+            } finally {
+                closeConnections();
+            }
+            return false;
+        }
+
 
 
         private boolean connectToMySQL() {

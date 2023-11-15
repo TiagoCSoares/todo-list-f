@@ -8,5 +8,4 @@ public class ChoreBook {
 
     public static final String UPDATE_CHORE = "UPDATE db2020108017.chores SET description=?, isCompleted=?, deadline=? WHERE id=?";
 
-
 }

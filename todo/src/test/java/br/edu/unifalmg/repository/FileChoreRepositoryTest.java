@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -86,17 +87,38 @@ public class FileChoreRepositoryTest {
 
 
     @Test
-    @DisplayName("#When the file is not found > Return FALSE")
-    void test1() {
-        Assertions.assertDoesNotThrow(() -> {
-            List<Chore> chores = Arrays.asList(
-                    new Chore("Chore 1", false, LocalDate.now()),
-                    new Chore("Chore 2", true, LocalDate.now().minusDays(2))
-            );
-            mapper.writeValue(new File("chores.json"), chores);
-            Assertions.assertFalse(chores.isEmpty());
-        });
+    @DisplayName("#save > When the file is not found(created) > Return FALSE")
+    void saveWhenTheFileIsNotFoundReturnFALSE() throws IOException {
+
+        Mockito.doThrow(FileNotFoundException.class)
+                .when(mapper)
+                .writeValue(Mockito.any(File.class), Mockito.anyList());
+
+        boolean result = repository.save(Collections.emptyList());
+
+        Assertions.assertFalse(result);
     }
 
+    @Test
+    @DisplayName("#save > Save an empty list")
+    void saveSaveAnEmptyList() {
+        List<Chore> emptyList = Collections.emptyList();
 
+        boolean result = repository.save(emptyList);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("#save > Save a list of Chores")
+    void saveSaveAListOfChores() {
+        List<Chore> choresToSave = Arrays.asList(
+                new Chore("Chore 1", false, LocalDate.now()),
+                new Chore("Chore 2", true, LocalDate.now().minusDays(2))
+        );
+
+        boolean result = repository.save(choresToSave);
+
+        Assertions.assertTrue(result);
+    }
 }

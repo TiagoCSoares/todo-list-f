@@ -91,6 +91,7 @@ public class ChoreService {
 //         chore.setIsCompleted(Boolean.FALSE);
 
 
+        repository.save(chore);
         chores.add(chore);
         return chore;
     }
@@ -179,7 +180,7 @@ public class ChoreService {
      *          FALSE, when the save fails
      */
     public Boolean saveChores() {
-        return repository.save(this.chores);
+        return repository.saveAll(this.chores);
     }
 
     private final Predicate<List<Chore>> isChoreListEmpty = choreList -> choreList.isEmpty();
